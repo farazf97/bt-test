@@ -1,6 +1,7 @@
-package main.java.com.bt.billing;
+package billing;
 
 import java.io.File;
+import billing.core.*;
 
 public class MassiveBillingApp {
     public static void main(String[] args) {
@@ -14,6 +15,15 @@ public class MassiveBillingApp {
         if (!input.exists() || !input.isFile()) {
             System.err.println("Invalid file: " + args[0]);
             return;
+        }
+
+        try {
+            LogFileScanner scanner = new LogFileScanner();
+            scanner.scan(input);
+
+        } catch (Exception ex) {
+            System.err.println("Fatal error: " + ex.getMessage());
+            ex.printStackTrace();
         }
 
     }
