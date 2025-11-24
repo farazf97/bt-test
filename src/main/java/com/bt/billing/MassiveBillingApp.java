@@ -8,6 +8,8 @@ import billing.process.*;
 import billing.sort.*;
 
 public class MassiveBillingApp {
+    final static int MAX_CHUNK_LINES = 100_000;
+
     public static void main(String[] args) {
         if (args.length != 1) {
             System.err.println("Usage: java MassiveBillingApp <logFilePath>");
@@ -24,8 +26,12 @@ public class MassiveBillingApp {
             LogFileScanner scanner = new LogFileScanner();
             scanner.scan(input);
 
+            SorterConfiguration config = SorterConfiguration.builder()
+                    .maxChunkLines(MAX_CHUNK_LINES)
+                    .build();
+
             // File based merge sort to handle extremely massive files in chunks
-            LogFileSorter sorter = new LogFileSorter();
+            LogFileSorter sorter = new LogFileSorter(config);
             File sortedFile = sorter.sort(input);
 
             BillingCalculator calculator = new BillingCalculator(scanner.getGlobalEarliest(),

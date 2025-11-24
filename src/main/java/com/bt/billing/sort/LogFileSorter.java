@@ -10,16 +10,16 @@ public final class LogFileSorter {
     private final ChunkMerger merger;
 
     public LogFileSorter() {
-        this(100_000);
+        this(SorterConfiguration.builder().build());
     }
 
-    public LogFileSorter(int maxChunkLines) {
-        if (maxChunkLines <= 0) {
+    public LogFileSorter(SorterConfiguration config) {
+        if (config.getMaxChunkLines() <= 0) {
             throw new IllegalArgumentException("maxChunkLines must be > 0");
         }
-        this.maxChunkLines = maxChunkLines;
-        this.chunkWriter = new ChunkWriter(this.maxChunkLines, new LogLineComparator());
-        this.merger = new ChunkMerger(new LogLineComparator());
+        this.maxChunkLines = config.getMaxChunkLines();
+        this.chunkWriter = new ChunkWriter(this.maxChunkLines, config.getComparator());
+        this.merger = new ChunkMerger(config.getComparator());
     }
 
     public File sort(File input) throws IOException {
