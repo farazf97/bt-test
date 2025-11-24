@@ -61,14 +61,15 @@ class MassiveBillingAppTest {
         }
 
         String expectedContent = "";
+
         try {
-            expectedContent = Files.readString(expectedOutputPath);
+            expectedContent = Files.readString(expectedOutputPath).trim();
         } catch (IOException e) {
             fail("Failed to read expected output file: " + expectedOutputPath.toAbsolutePath());
         }
 
         assertTrue(output.contains(expectedContent),
-                String.format("File '%s' output did not contain expected string '%s'.\nActual Output:\n%s",
+                String.format("File '%s' output did not contain expected string '%s'.\n Actual Output:\n %s",
                         fileName, expectedContent, output));
     }
 

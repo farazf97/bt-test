@@ -2,6 +2,7 @@ package billing;
 
 import java.io.File;
 import billing.core.*;
+import billing.sort.*;
 
 public class MassiveBillingApp {
     public static void main(String[] args) {
@@ -20,6 +21,10 @@ public class MassiveBillingApp {
         try {
             LogFileScanner scanner = new LogFileScanner();
             scanner.scan(input);
+
+            // File based merge sort to handle extremely massive files in chunks
+            LogFileSorter sorter = new LogFileSorter();
+            File sortedFile = sorter.sort(input);
 
         } catch (Exception ex) {
             System.err.println("Fatal error: " + ex.getMessage());
