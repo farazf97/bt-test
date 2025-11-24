@@ -1,12 +1,14 @@
 package billing;
 
 import java.io.File;
+import java.nio.file.Files;
+
 import billing.core.*;
+import billing.process.*;
 import billing.sort.*;
 
 public class MassiveBillingApp {
     public static void main(String[] args) {
-        System.out.println("MassiveBillingApp started");
         if (args.length != 1) {
             System.err.println("Usage: java MassiveBillingApp <logFilePath>");
             return;
@@ -25,6 +27,14 @@ public class MassiveBillingApp {
             // File based merge sort to handle extremely massive files in chunks
             LogFileSorter sorter = new LogFileSorter();
             File sortedFile = sorter.sort(input);
+
+            BillingCalculator calculator = new BillingCalculator(scanner.getGlobalEarliest(),
+                    scanner.getGlobalLatest());
+
+            BillingReport report = calculator.calculate(sortedFile);
+            report.print();
+
+            Files.deleteIfExists(sortedFile.toPath());
 
         } catch (Exception ex) {
             System.err.println("Fatal error: " + ex.getMessage());
