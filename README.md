@@ -61,8 +61,17 @@ Execute the test suite using the standalone JUnit runner:
 java -jar lib/junit-standalone.jar -cp bin -c test.java.com.bt.billing.MassiveBillingAppTest
 ```
 
+### 4.Test files
+Test files are in `src/test/java/com/bt/billing/` directory with the following structure:
+
+- `logs/` directory contains test log files
+- `expected_output/` directory contains expected output files
+- `test/` directory contains test files
+
 ## Design Decisions
 
 -   **File based merge sort**: Chosen over in-memory sorting, allows processing files larger than available RAM (even Terabytes in size) and 1 billion+ users. Using HashMap will only be good for smaller work loads and will throw OutOfMemoryError when processing large files or when there are too many users (~200 Bytes per user, for 1 billion users it's 200 GB). This solution achieves O(n log n) Time complexity, O(n) Space complexity, scales to Terabytes and over Billion users.
 
--   **Builder Pattern**: Applied to `LogFileSorter` to allow easy extension of configuration parameters (e.g., buffer size, temp directory) without polluting constructors.
+-  **Builder Pattern**: Applied to `LogFileSorter` to allow easy extension of configuration parameters (e.g., buffer size, temp directory) without polluting constructors.
+
+- **Factory Pattern**: Applied to `LogRecordFactory` to allow easy extension of record.
